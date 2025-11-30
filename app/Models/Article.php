@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Comment;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,10 +10,10 @@ class Article extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title','slug'];
+    protected $fillable = ['title', 'slug'];
 
-    public function user()
+    public function comments()
     {
-        return $this->belongsTo(User::class);
+        return $this->morphMany(Comment::class, 'commentable');
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\ArticleShow;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,7 +16,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
 
-Route::view('/article/{slug?}', 'article')->name('atricle.show');
+Route::get('article/{article:slug}', ArticleShow::class)
+    ->middleware(['auth', 'verified'])
+    ->name('article.show');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])

@@ -9,6 +9,8 @@ $logout = function (Logout $logout) {
     $this->redirect('/', navigate: true);
 };
 
+//$slug = Article::first()->slug;
+
 ?>
 
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
@@ -26,17 +28,15 @@ $logout = function (Logout $logout) {
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
-                        Dashboard
+                        {{__('Dashboard')}}
                     </x-nav-link>
                 </div>
 
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    @php $slug = Article::first()->slug;dd($slug); @endphp
-
-                    <x-nav-link :href="route('atricle.show', {{ $slug }})" :active="request()->routeIs('atricle.show')"
+                    <x-nav-link href="{{route('article.show',  Article::first()->slug )}}" :active="request()->routeIs('article.show')"
                                 wire:navigate>
-                        Article
+                        {{__('Article')}}
                     </x-nav-link>
                 </div>
             </div>
