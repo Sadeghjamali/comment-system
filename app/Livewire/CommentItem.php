@@ -14,14 +14,14 @@ class CommentItem extends Component
 
     public function reply()
     {
+        $this->authorize('reply', $this->comment);
         $this->replyForm->validate();
         $reply = $this->comment->children()->make($this->replyForm->only('body'));
         $reply->user()->associate(auth()->user());
         $reply->save();
 
-        $this->dispatch('replied',$this->comment->id);
+        $this->dispatch('replied', $this->comment->id);
         $this->replyForm->reset('body');
-
     }
 
     public function render()

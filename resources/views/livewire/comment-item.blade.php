@@ -20,10 +20,13 @@
         <p class="text-gray-500 dark:text-gray-400">{{$this->comment->body}}</p>
 
         <div class="flex items-center mt-4 space-x-4">
-            <button type="button" x-on:click=" replying= true"
+            @can('reply')
+                <button type="button" x-on:click=" replying= true"
                     class="flex items-center text-sm text-gray-500 hover:underline dark:text-gray-400 font-medium">
                 Reply
             </button>
+            @endcan
+            
             <button type="button"
                     class="flex items-center text-sm text-gray-500 hover:underline dark:text-gray-400 font-medium">
                 Edit
