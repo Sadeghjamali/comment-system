@@ -27,7 +27,7 @@ class Comments extends Component
         return view('livewire.comments',[
             'comments' => $this->model->comments()
                 ->with(['user' ,'children'=>function($query){
-                    $query->latest()->with('user');
+                    $query->with('user')->latest();
                 }])
                 ->latest()->get()
         ]);
