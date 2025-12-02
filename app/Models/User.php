@@ -43,6 +43,12 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function avatar()
+    {
+        return 'https://gravatar.com/avatar/' . hash('sha256', strtolower(trim($this->email)))
+            . '?d=retro';
+    }
+
     public function articles()
     {
         return $this->hasMany(Article::class);
