@@ -1,56 +1,65 @@
 version: "3.8"
 
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_app
+    restart: always
+    volumes:
+      - .:/var/www/html
+    networks:
+      - tirgannet_network
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: comment-system
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+    ports:
+      - "3306"   # بیرون روی 3307، داخل کانتینر روی 3306
+    networks:
+      - tirgannet_network
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - "8081:80"
+    networks:
+      - tirgannet_network
+    depends_on:
+      - mysql
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf   # مسیر درست از روت پروژه
+    networks:
+      - tirgannet_network
+    depends_on:
+      - app
+
 networks:
   tirgannet_network:
     driver: bridge
 
 volumes:
-  mysql-data:
-    driver: local
-
-  pma-data:
-    driver: local
-
-services:
-  mysql:
-    image: "${MYSQL_IMG}"
-    container_name: "${MYSQL_CONTAINER_NAME}"
-    restart: "${MYSQL_RESTART_MODE}"
-    tty: true
-
-    environment:
-      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
-      MYSQL_DATABASE: "${MYSQL_DATABASE}"
-      MYSQL_USER: "${MYSQL_USER}"
-      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
-      MYSQL_ALLOW_EMPTY_PASSWORD: "${MYSQL_ALLOW_EMPTY_PASSWORD}"
-    ports:
-      - "${MYSQL_PORT}:80"
-    volumes:
-      - "mysql-data:/var/lib/mysql"
-    networks:
-      - tirgannet_network
-
-  phpmyadmin:
-    image: "${PMA_IMG}"
-    container_name: "${PMA_CONTAINER_NAME}"
-    
-    environment:
-      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
-      PMA_HOST: "${PMA_HOST}"
-      PMA_MYSQL_PORT: "${MYSQL_PORT}"
-      PMA_UI_PORT: "${PMA_UI_PORT}"
-
-    restart: "${PMA_RESTART_MODE}"
-
-    depends_on:
-      - mysql
-
-    ports:
-      - "${PMA_UI_PORT}:80"
-    volumes:
-      - "pma-data:/etc/phpmyadmin/config.user.inc.php"
-    networks:
-      - tirgannet_network
-    links:
-      - mysql
+  mysql_data:
