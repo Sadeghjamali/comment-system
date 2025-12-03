@@ -1,22 +1,26 @@
 <div>
     @if (!$deleted)
-    <div x-data="{replying:false , editing:false}" x-on:replied.window="replying = false"
-        x-on:edited.window="editing = false">
+    <div class="border-b-2 border-gray-200 last:border-b-0 "
+            x-data="{replying:false , editing:false}"
+            x-on:replied.window="replying = false" 
+            x-on:edited.window="editing = false">
 
-        <div wire:key="{{$comment->id}}"
-            class="border-b-2 border-gray-200 last:border-b-0 p-6 text-base bg-white rounded-lg dark:bg-gray-900">
+        <div wire:key="{{$comment->id}}" class="p-6 text-base dark:bg-gray-900">
             <header class="flex justify-between items-center mb-2">
                 <div class="flex items-center">
                     <p class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white font-semibold">
                         <img class="mr-2 w-6 h-6 rounded-full" src="{{$comment->user->avatar()}}"
-                            alt="{{ $comment->user->name }}">{{ $comment->user->name }} </p>
+                            alt="{{ $comment->user->name }}">{{ $comment->user->name }}
+                    </p>
                     <p class="text-sm text-gray-600 dark:text-gray-400">
-                        <time pubdate datetime="2022-02-08"
-                            title="February 8th, 2022">{{$this->comment->created_at->diffForHumans()}}</time>
+                        <time pubdate x-human-date datetime="{{ $comment->created_at->toDateTimeString() }}"
+                            title="{{ $comment->created_at }}">
+                            {{ $comment->created_at->diffForHumans() }}
+                        </time>
                     </p>
                 </div>
             </header>
-            <p class="text-gray-500 dark:text-gray-400">{{$this->comment->body}}</p>
+            <p class="text-gray-500 dark:text-gray-400">{{$comment->body}}</p>
 
             <div class="flex items-center mt-4 space-x-4">
                 @can('reply',$comment)
@@ -79,13 +83,15 @@
                 </form>
             </template>
 
-            <div class="ml-6 lg:ml-12 text-base bg-white rounded-lg dark:bg-gray-900">
-                @if(is_null($comment->parent_id) && $comment->children()->count())
-                @foreach($comment->children as $child)
-                <livewire:commen-titem :comment="$child" :key="$child->id" />
-                @endforeach
-                @endif
-            </div>
+
+        </div>
+
+        <div class="ml-6 lg:ml-12 text-base bg-white rounded-lg dark:bg-gray-900">
+            @if(is_null($comment->parent_id) && $comment->children()->count())
+            @foreach($comment->children as $child)
+            <livewire:commen-titem :comment="$child" :key="$child->id" />
+            @endforeach
+            @endif
         </div>
     </div>
     @endif

@@ -19,7 +19,7 @@ class Comments extends Component
         $comment->user()->associate(auth()->user());
         $comment->save();
 
-        $this->form->reset('form');
+        $this->form->reset('body');
     }
 
     public function render()
