@@ -23,7 +23,7 @@ services:
       MYSQL_DATABASE: comment-system
       MYSQL_ALLOW_EMPTY_PASSWORD: yes
     ports:
-      - "3306"   # بیرون روی 3307، داخل کانتینر روی 3306
+      - "3306:3306"   # بیرون روی 3307، داخل کانتینر روی 3306
     networks:
       - tirgannet_network
     volumes:

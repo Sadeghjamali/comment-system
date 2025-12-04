@@ -15,10 +15,10 @@
             </x-primary-button>
         </form>
         @if($comments->count())
-        @foreach($comments as $comment)
-            <livewire:comment-item :comment="$comment" :key="$comment->id"/>
-        @endforeach
-    @endif
+            @foreach($comments as $comment)
+                <livewire:comment-item :comment="$comment" :key="$comment->id"/>
+            @endforeach
+        @endif
     </div>
     
 {{-- </div> --}}

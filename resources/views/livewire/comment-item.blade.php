@@ -1,9 +1,7 @@
-<div>
+<div class="border-b border-gray-200 last:border-b-0">
     @if (!$deleted)
-    <div class="border-b-2 border-gray-200 last:border-b-0 "
-            x-data="{replying:false , editing:false}"
-            x-on:replied.window="replying = false" 
-            x-on:edited.window="editing = false">
+    <div x-data="{replying:false , editing:false}" x-on:replied.window="replying = false"
+        x-on:edited.window="editing = false">
 
         <div wire:key="{{$comment->id}}" class="p-6 text-base dark:bg-gray-900">
             <header class="flex justify-between items-center mb-2">
@@ -82,17 +80,17 @@
                     </div>
                 </form>
             </template>
-
+            <div class="ml-6 lg:ml-12 text-base bg-white rounded-lg dark:bg-gray-900">
+                @if(is_null($comment->parent_id) && $comment->children()->count())
+                @foreach($comment->children as $child)
+                <livewire:commen-titem :comment="$child" :key="$child->id" />
+                @endforeach
+                @endif
+            </div>
 
         </div>
 
-        <div class="ml-6 lg:ml-12 text-base bg-white rounded-lg dark:bg-gray-900">
-            @if(is_null($comment->parent_id) && $comment->children()->count())
-            @foreach($comment->children as $child)
-            <livewire:commen-titem :comment="$child" :key="$child->id" />
-            @endforeach
-            @endif
-        </div>
+
     </div>
     @endif
 </div>

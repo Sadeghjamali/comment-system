@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Models\Comment;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -53,4 +55,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(Article::class);
     }
+      
+    public function comments(){
+        return $this->hasMany(Comment::class);
+    }
+
+    public static function booted(){
+        static::deleting(function(User $user){
+            $user->comments()->delete();
+        });
+    }
+  
 }
