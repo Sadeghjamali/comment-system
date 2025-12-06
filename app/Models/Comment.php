@@ -11,7 +11,7 @@ class Comment extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['body'];
+    protected $guarded = [];
 
     public function user()
     {
